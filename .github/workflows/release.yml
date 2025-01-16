@@ -1,4 +1,4 @@
-name: Generate Installable Plugin and Upload as Release Asset
+name: Generate Installable Theme and Upload as Release Asset
 on:
   release:
     types: [published]
@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            src/wp-content/plugins/cp-pepper
+            src/wp-content/themes/twentyseventeen
           repository: 'ClassicPress/ClassicPress'
       - name: setup git config
         run: |
@@ -19,17 +19,17 @@ jobs:
           git config user.email "<>"
       - name: Create artifact
         run : |
-          cd src/wp-content/plugins/
-          zip -r cp-pepper.zip cp-pepper 
+          cd src/wp-content/themes/
+          zip -r twentyseventeen.zip twentyseventeen 
           ls
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-            name: cp-pepper
-            path: src/wp-content/plugins/cp-pepper.zip
+            name: twentyseventeen
+            path: src/wp-content/plugins/twentyseventeen.zip
       - name: Upload to release
         uses: JasonEtco/upload-to-release@master
         with:
-          args: src/wp-content/plugins/cp-pepper.zip application/zip
+          args: src/wp-content/plugins/twentyseventeen.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
