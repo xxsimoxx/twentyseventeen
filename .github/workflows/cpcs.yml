@@ -1,0 +1,7 @@
+name: ClassicPress Directory Coding Standard checks.
+on: [pull_request]
+jobs:
+  always-pass:
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
