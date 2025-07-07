@@ -21,7 +21,7 @@ jobs:
         id: last-commit
         run : |
           cd src/wp-content/themes/
-          ( echo "LAST_UPSTREAM_COMMIT=\""; git log -1 -- twentyseventeen | grep -E '\(\#[0-9]+\)'; echo "\""; ) >> $GITHUB_OUTPUT
+          ( echo -n "LAST_UPSTREAM_COMMIT=\""; git log -1 -- twentyseventeen | grep -E '\(\#[0-9]+\)' | tr -d '\n' ; echo "\""; ) >> $GITHUB_OUTPUT
           zip -r twentyseventeen.zip twentyseventeen 
           ls
       - name: Upload artifact
