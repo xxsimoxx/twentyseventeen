@@ -17,19 +17,28 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-      - name: Create artifact
+      - name: Create artifact and bring last commit
+        id: last-commit
         run : |
           cd src/wp-content/themes/
+          ( echo -n "LAST_UPSTREAM_COMMIT=\""; git log -1 -- twentyseventeen | grep -E '\(\#[0-9]+\)' | tr -d '\n' ; echo "\""; ) >> $GITHUB_OUTPUT
           zip -r twentyseventeen.zip twentyseventeen 
           ls
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-            name: twentyseventeen
-            path: src/wp-content/themes/twentyseventeen.zip
+          name: twentyseventeen
+          path: src/wp-content/themes/twentyseventeen.zip
       - name: Upload to release
         uses: JasonEtco/upload-to-release@master
         with:
           args: src/wp-content/themes/twentyseventeen.zip application/zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload
+        uses: djn24/add-comment-to-release@v1
+        with:
+          token: ${{secrets.GITHUB_TOKEN}}
+          comment: |-
+            Last commit:
+            ${{ steps.last-commit.outputs.LAST_UPSTREAM_COMMIT }}
